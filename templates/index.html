@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Crypto Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+      background-color: #f9f9f9;
+    }
+    h1 { color: #333; }
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Crypto Tracker API</h1>
+  <p>Click a button to open the data in a new tab:</p>
+
+  <button onclick="window.open('/api/crypto/markets', '_blank')">
+    View Market Data
+  </button>
+
+  <button onclick="window.open('/api/crypto/coin/bitcoin', '_blank')">
+    View Bitcoin Data
+  </button>
+
+</body>
+</html>

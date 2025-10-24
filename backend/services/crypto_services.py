@@ -1,15 +1,24 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-BASE_URL = "https://api.coingecko.com/api/v3"
+# Load the .env file
+load_dotenv()
 
-def get_market_data():
-    endpoint = f"{BASE_URL}/coins/markets"
+def get_crypto_markets(per_page, page):
+    url = "https://api.coingecko.com/api/v3/coins/markets"
+    
     params = {
         "vs_currency": "usd",
         "order": "market_cap_desc",
-        "per_page": 10,
-        "page": 1
+        "per_page": per_page,
+        "page": page
     }
-    response = requests.get(endpoint, params=params)
-    response.raise_for_status()
+
+    headers = {
+        "accept": "application/json",
+        "x-cg-demo-api-key": os.getenv("COINGECKO_API_KEY")
+    }
+
+    response = requests.get(url, params=params, headers=headers)
     return response.json()

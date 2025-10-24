@@ -1,11 +1,16 @@
 # routes/crypto_routes.py
 from flask import Blueprint, jsonify
 import requests
+from services.crypto_services import get_crypto_markets
 
 # --- Create the Blueprint ---
 # "crypto" = internal Flask name for this module (like a department name)
 # __name__ = lets Flask know where this file lives
 crypto_bp = Blueprint("crypto", __name__)
+
+#Incoporate a highlight feataure#
+#Research different Crypto Portfolio trackers and compare/contrast. Implement them#
+#Look into some Crypto Research#
 
 # --- Example route: fetch crypto market data ---
 @crypto_bp.route("/markets", methods=["GET"])
@@ -15,17 +20,14 @@ def get_markets():
     and returns it as JSON to the client.
     """
     try:
-        # Call a public API to get data about the top cryptocurrencies
-        response = requests.get(
-            "https://api.coingecko.com/api/v3/coins/markets",
-            params={"vs_currency": "usd", "order": "market_cap_desc", "per_page": 10, "page": 1}
-        )
-        response.raise_for_status()  # Raises an error if something went wrong
-        data = response.json()       # Convert response to Python list/dict
-        return jsonify(data)         # Flask converts it to JSON for the frontend
+        # Dynamically read URL parameters (e.g. ?per_page=50&page=2)
+        per_page = requests.args.get("per_page", default=10, type=int)
+        page = requests.args.get("page", default=1, type=int)
 
-    except requests.exceptions.RequestException as e:
-        # Handle errors gracefully and return a proper message
+        data = get_crypto_markets(per_page=per_page, page=page)
+        return jsonify(data)
+
+    except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 

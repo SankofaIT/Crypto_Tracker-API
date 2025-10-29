@@ -1,6 +1,5 @@
 # routes/crypto_routes.py
-from flask import Blueprint, jsonify
-import requests
+from flask import Blueprint, jsonify, request
 from services.crypto_services import get_crypto_markets
 
 # --- Create the Blueprint ---
@@ -21,8 +20,8 @@ def get_markets():
     """
     try:
         # Dynamically read URL parameters (e.g. ?per_page=50&page=2)
-        per_page = requests.args.get("per_page", default=10, type=int)
-        page = requests.args.get("page", default=1, type=int)
+        per_page = request.args.get("per_page", default=100, type=int)
+        page = request.args.get("page", default=1, type=int)
 
         data = get_crypto_markets(per_page=per_page, page=page)
         return jsonify(data)
@@ -39,9 +38,9 @@ def get_coin_details(coin_id):
     For example: /api/crypto/coin/bitcoin
     """
     try:
-        response = requests.get(f"https://api.coingecko.com/api/v3/coins/{coin_id}")
+        response = request.get(f"https://api.coingecko.com/api/v3/coins/{coin_id}")
         response.raise_for_status()
         data = response.json()
         return jsonify(data)
-    except requests.exceptions.RequestException as e:
+    except request.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500

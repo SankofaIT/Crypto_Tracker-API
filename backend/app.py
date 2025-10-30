@@ -2,10 +2,12 @@ from flask import Flask, render_template
 from routes.crypto_routes import crypto_bp
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS;
 
 load_dotenv()   #Load env variables from .env
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(crypto_bp, url_prefix="/api/crypto")
 
 @app.route("/")
